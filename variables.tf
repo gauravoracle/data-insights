@@ -23,22 +23,22 @@ variable "vcn_application_cidr_blocks" {
 
 variable "subnet_application_lb_pub_cidr" {
   type = string
-  default = "10.0.0.0/16"
+  default = "10.0.0.0/24"
 }
 
 variable "subnet_application_app_cidr" {
   type = string
-  default = "10.0.1.0/16"
+  default = "10.0.1.0/24"
 }
 
 variable "subnet_application_db_cidr" {
   type = string
-  default = "10.0.2.0/16"
+  default = "10.0.2.0/24"
 }
 
 variable "subnet_application_infra_cidr" {
   type = string
-  default = "10.0.3.0/16"
+  default = "10.0.3.0/24"
 }
 
 
