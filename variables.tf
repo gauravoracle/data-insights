@@ -1,4 +1,4 @@
-# Global
+# Global Vars
 variable "region" {
   type = string
 }
