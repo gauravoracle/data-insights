@@ -1,0 +1,210 @@
+---
+  description: Oracle Data Insights
+  schemaVersion: 1.1.0
+  title: Deploy Oracle Data Insights Stack
+  version: "20210309"
+  variableGroups:
+    - title: Hidden
+      variables:
+        - compartment_ocid
+        - region
+        - tenancy_ocid
+        - image_oraclelinux_7
+        - autonomous_database_license_model
+        - autonomous_database_data_safe_status
+        - autonomous_database_db_workload
+        - analytics_instance_capacity_type
+        - analytics_instance_feature_set
+        - analytics_instance_license_type
+        - analytics_instance_network_endpoint
+      visible: false
+    - title: Network
+      variables:
+        - vcn_compartment_id
+        - vcn_application_cidr_blocks
+        - subnet_application_lb_pub_cidr
+        - subnet_application_app_cidr
+        - subnet_application_db_cidr
+        - subnet_application_infra_cidr
+      visible: true
+    - title: Compute
+      variables:
+        - instance_compartment_id
+        - instance_availability_domain
+        - instance_shape
+        - instance_hostname_label
+        - instance_display_name
+        - instance_boot_volume_size
+        - ssh_public_key
+        - instance_shape_config_memory_in_gbs
+        - instance_shape_config_ocpus
+      visible: true
+    - title: Database
+      variables:
+        - autonomous_database_compartment_id
+        - autonomous_database_cpu_core_count
+        - autonomous_database_db_name
+        - autonomous_database_admin_password
+        - autonomous_database_data_storage_size_in_tbs
+        - autonomous_database_db_version
+        - autonomous_database_display_name
+    - title: Analytics
+      variables:
+        - analytics_instance_compartment_id
+        - analytics_instance_capacity_value
+        - analytics_instance_idcs_access_token
+        - analytics_instance_name
+        - analytics_instance_description
+      visible: true
+  variables:
+    #Global
+    compartment_ocid:
+        required: true
+        title: Compartment the stack is in
+        type: oci:identity:compartment:id
+    region:
+        required: true
+        title: Region the stack is in
+        type: oci:identity:region:name
+    tenancy_ocid:
+        required: true
+        title: Tenancy the stack is in
+        type: string
+    #VCN
+    vcn_compartment_id:
+        required: true
+        title: Compartment for VCN
+        type: oci:identity:compartment:id
+    vcn_application_cidr_blocks:
+        required: true
+        title: CIDR blocks for VCN
+        type: string
+        default: "10.0.0.0/16"
+    subnet_application_lb_pub_cidr:
+        required: true
+        title: CIDR for Public Load Balancer Subnet
+        type: string
+        default: "10.0.0.0/24"
+    subnet_application_app_cidr:
+        required: true
+        title: CIDR for Application Subnet
+        type: string
+        default: "10.0.1.0/24"
+    subnet_application_db_cidr:
+        required: true
+        title: CIDR for Database Subnet
+        type: string
+        default: "10.0.2.0/24"
+    subnet_application_infra_cidr:
+        required: true
+        title: CIDR for Infrastructure Services
+        type: string
+        default: "10.0.3.0/24"
+    #Compute
+    instance_compartment_id:
+        required: true
+        title: Compartment for Compute
+        type: oci:identity:compartment:id
+    instance_availability_domain:
+        dependsOn:
+            compartmentId: ${instance_compartment_id}
+        required: true
+        title: Availability Domain
+        type: oci:identity:availabilitydomain:name
+    instance_shape:
+        dependsOn:
+            compartmentId: ${instance_compartment_id}
+        required: true
+        title: Instance Shape
+        type: oci:core:instanceshape:name
+        default: "VM.Standard.E3.Flex"
+    instance_hostname_label:
+        required: false
+        title: Instance Hostname Label
+        type: string
+        default: "vm01"
+    instance_display_name:
+        required: false
+        title: Instance Display Name
+        type: string
+        default: "vm01"
+    instance_boot_volume_size:
+        required: true
+        title: Instance boot Volume Size
+        type: number
+        default: 100
+    ssh_public_key:
+        additionalProps:
+          allowMultiple: true
+        default: [""]
+        title: SSH Public Key
+        type: oci:core:ssh:publickey
+    instance_shape_config_memory_in_gbs:
+        required: true
+        title: Instance Memory
+        type: number
+        default: 16
+    instance_shape_config_ocpus:
+        required: true
+        title: Instance OCPUs
+        type: number
+        default: 1
+    #Database
+    autonomous_database_compartment_id:
+        required: true
+        title: Compartment for Autonomous Database
+        type: oci:identity:compartment:id
+    autonomous_database_cpu_core_count:
+        required: true
+        title: Autonomous Database CPU Count
+        type: number
+        default: 2
+    autonomous_database_db_name:
+        required: false
+        title: Autonomous Database Name
+        type: string
+        default: "db01"
+    autonomous_database_admin_password:
+        required: true
+        title: Autonomous Database Admin Password
+        type: password
+    autonomous_database_data_storage_size_in_tbs:
+        required: true
+        title: Autonomous Database Data Storage
+        type: number
+        default: 1
+    autonomous_database_db_version:
+        required: true
+        title: Autonomous Database Version
+        type: string
+        default: "19c"
+    autonomous_database_display_name:
+        required: false
+        title: Autonomous Database Display Name
+        type: string
+        default: "db01"
+    #Analytics
+    analytics_instance_compartment_id:
+        required: true
+        title: Compartment for Analytics Instance
+        type: oci:identity:compartment:id
+    analytics_instance_capacity_value:
+        required: true
+        title: Analytics Instance CPU Count
+        type: number
+        default: 2
+    analytics_instance_idcs_access_token:
+        required: true
+        title: Analytics Instance IDCS Token
+        type: password
+    analytics_instance_name:
+        required: false
+        title: Analytics Instance Name
+        type: string
+        default: "oac01"
+    analytics_instance_description:
+        required: false
+        title: Analytics Instance Description
+        type: string
+        default: "Oracle Analytics Instance"
+...
